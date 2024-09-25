@@ -2,11 +2,26 @@
   "name": "refactoringjavascript-2nd-",
   "version": "1.0.0",
   "main": "index.js",
+  "author": "",
+  "keywords": [],
+  "license": "ISC",
+  "description": "",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "keywords": [],
-  "author": "",
-  "license": "ISC",
-  "description": ""
+  "devDependencies": {
+    "@types/bun": "latest",
+    "nodemon": "^3.1.4",
+    "ts-node": "^10.9.2",
+    "wish": "^1.0.1"
+  },
+  "peerDependencies": {
+    "typescript": "^5.0.0"
+  },
+  "dependencies": {
+    "@types/chai": "^4.3.18",
+    "chai": "^5.1.1",
+    "deep-equal": "^2.2.3",
+    "mocha": "^10.7.3"
+  }
 }
