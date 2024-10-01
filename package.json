@@ -2,12 +2,15 @@
   "name": "refactoringjavascript-2nd-",
   "version": "1.0.0",
   "main": "index.js",
+  "type": "module",
   "author": "",
   "keywords": [],
   "license": "ISC",
   "description": "",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "mocha",
+    "test:watch": "mocha --node-option=watch",
+    "lint": "eslint . --fix"
   },
   "devDependencies": {
     "@types/bun": "latest",
@@ -20,7 +23,7 @@
   },
   "dependencies": {
     "@types/chai": "^4.3.18",
-    "byul": "^2.0.2",
+    "byul": "^2.0.7",
     "chai": "^5.1.1",
     "deep-equal": "^2.2.3",
     "mocha": "^10.7.3"
