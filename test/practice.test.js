@@ -6,6 +6,7 @@ const Difficulty = {
   Medium: "medium",
   Hard: "hard",
 };
+
 const imagine = ["c", "cmaj7", "f", "am", "dm", "g", "e7"];
 const somewhereOverTheRainbow = ["c", "em", "f", "g", "am"];
 const tooManyCooks = ["c", "g", "f"];
@@ -53,10 +54,11 @@ const songsManager = {
 function train(chords, label) {
   songsManager.songs.push({ label, chords });
   if (Object.keys(songsManager.labelCounts).includes(label)) {
-    songsManager.labelCounts[label] = songsManager.labelCounts[label] + 1;
+    songsManager.labelCounts[label]++;
   } else {
     songsManager.labelCounts[label] = 1;
   }
+  return songsManager;
 }
 
 function setLabelProbabilities() {
@@ -71,16 +73,15 @@ function setLabelProbabilities() {
 function setChordCountsInLabels() {
   songsManager.songs.forEach((song) => {
     const { label, chords } = song;
-    if (!songsManager.chordCountsInLabels[label]) {
-      songsManager.chordCountsInLabels[label] = {};
-    }
+    songsManager.chordCountsInLabels[label] =
+      songsManager.chordCountsInLabels[label] ?? {};
     chords.forEach((chord) => {
-      if (!songsManager.chordCountsInLabels[label][chord]) {
-        songsManager.chordCountsInLabels[label][chord] = 0;
-      }
+      songsManager.chordCountsInLabels[label][chord] =
+        songsManager.chordCountsInLabels[label][chord] ?? 0;
       songsManager.chordCountsInLabels[label][chord]++;
     });
   });
+  return songsManager.chordCountsInLabels;
 }
 
 const setTrain = () => {
@@ -120,7 +121,9 @@ function classify(chords) {
 }
 
 function setProbabilityOfChordsInLabels() {
-  songsManager.probabilityOfChordsInLabels = songsManager.chordCountsInLabels;
+  songsManager.probabilityOfChordsInLabels =
+    songsManager.probabilityOfChordsInLabels;
+
   Object.keys(songsManager.probabilityOfChordsInLabels).forEach(
     (difficulty) => {
       Object.keys(songsManager.probabilityOfChordsInLabels[difficulty]).forEach(
@@ -131,6 +134,7 @@ function setProbabilityOfChordsInLabels() {
       );
     }
   );
+  return songsManager.probabilityOfChordsInLabels;
 }
 
 init();
