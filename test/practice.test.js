@@ -13,33 +13,8 @@ const tooManyCooks = ["c", "g", "f"];
 const iWillFollowYouIntoTheDark = ["f", "dm", "bb", "c", "a", "bbm"];
 const babyOneMoreTime = ["cm", "g", "bb", "eb", "fm", "ab"];
 const creep = ["g", "gsus4", "b", "bsus4", "c", "cmsus4", "cm6"];
-const paperBag = [
-  "bm7",
-  "e",
-  "c",
-  "g",
-  "b7",
-  "f",
-  "em",
-  "a",
-  "cmaj7",
-  "em7",
-  "a7",
-  "f7",
-  "b",
-];
-const toxic = [
-  "cm",
-  "eb",
-  "g",
-  "cdim",
-  "eb7",
-  "d7",
-  "db7",
-  "ab",
-  "gmaj7",
-  "g7",
-];
+const paperBag = ["bm7", "e", "c", "g", "b7", "f", "em", "a", "cmaj7", "em7", "a7", "f7", "b"];
+const toxic = ["cm", "eb", "g", "cdim", "eb7", "d7", "db7", "ab", "gmaj7", "g7"];
 
 const bulletproof = ["d#m", "g#", "b", "f#", "g#m", "c#"];
 
@@ -63,8 +38,7 @@ function train(chords, label) {
 
 function setLabelProbabilities() {
   Object.keys(songsManager.labelCounts).forEach((label) => {
-    songsManager.labelProbabilities[label] =
-      songsManager.labelCounts[label] / songsManager.songs.length;
+    songsManager.labelProbabilities[label] = songsManager.labelCounts[label] / songsManager.songs.length;
   });
 
   return songsManager.labelProbabilities;
@@ -73,11 +47,9 @@ function setLabelProbabilities() {
 function setChordCountsInLabels() {
   songsManager.songs.forEach((song) => {
     const { label, chords } = song;
-    songsManager.chordCountsInLabels[label] =
-      songsManager.chordCountsInLabels[label] ?? {};
+    songsManager.chordCountsInLabels[label] = songsManager.chordCountsInLabels[label] ?? {};
     chords.forEach((chord) => {
-      songsManager.chordCountsInLabels[label][chord] =
-        songsManager.chordCountsInLabels[label][chord] ?? 0;
+      songsManager.chordCountsInLabels[label][chord] = songsManager.chordCountsInLabels[label][chord] ?? 0;
       songsManager.chordCountsInLabels[label][chord]++;
     });
   });
@@ -109,8 +81,7 @@ function classify(chords) {
   Object.keys(songsManager.labelProbabilities).forEach((difficulty) => {
     let first = songsManager.labelProbabilities[difficulty] + smoothing;
     chords.forEach((chord) => {
-      const probabilityOfChordInLabel =
-        songsManager.probabilityOfChordsInLabels[difficulty][chord];
+      const probabilityOfChordInLabel = songsManager.probabilityOfChordsInLabels[difficulty][chord];
       if (probabilityOfChordInLabel) {
         first = first * (probabilityOfChordInLabel + smoothing);
       }
@@ -121,19 +92,13 @@ function classify(chords) {
 }
 
 function setProbabilityOfChordsInLabels() {
-  songsManager.probabilityOfChordsInLabels =
-    songsManager.probabilityOfChordsInLabels;
+  songsManager.probabilityOfChordsInLabels = songsManager.probabilityOfChordsInLabels;
 
-  Object.keys(songsManager.probabilityOfChordsInLabels).forEach(
-    (difficulty) => {
-      Object.keys(songsManager.probabilityOfChordsInLabels[difficulty]).forEach(
-        (chord) => {
-          songsManager.probabilityOfChordsInLabels[difficulty][chord] /=
-            songsManager.songs.length;
-        }
-      );
-    }
-  );
+  Object.keys(songsManager.probabilityOfChordsInLabels).forEach((difficulty) => {
+    Object.keys(songsManager.probabilityOfChordsInLabels[difficulty]).forEach((chord) => {
+      songsManager.probabilityOfChordsInLabels[difficulty][chord] /= songsManager.songs.length;
+    });
+  });
   return songsManager.probabilityOfChordsInLabels;
 }
 
