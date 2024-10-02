@@ -9,6 +9,22 @@ const classifier = {
   labelProbabilities: new Map(),
   chordCountsInLabels: new Map(),
   probabilityOfChordsInLabels: new Map(),
+  classify(chords) {
+    const smoothing = 1.01;
+    const classified = new Map();
+    classifier.labelProbabilities.forEach(function (_probabilities, difficulty) {
+      const totalikelihood = chords.reduce((total, chord) => {
+        const probabilityOfChordInLabel = classifier.probabilityOfChordsInLabels.get(difficulty)[chord];
+        if (probabilityOfChordInLabel) {
+          return total * (probabilityOfChordInLabel + smoothing);
+        } else {
+          return total;
+        }
+      }, classifier.labelProbabilities.get(difficulty) + smoothing);
+      classified.set(difficulty, totalikelihood);
+    });
+    return classified;
+  },
 };
 
 const songList = {
@@ -47,10 +63,7 @@ function train(chords, label) {
 
 function setLabelProbabilities() {
   classifier.labelCounts.forEach(function (_count, label) {
-    classifier.labelProbabilities.set(
-      label,
-      classifier.labelCounts.get(label) / classifier.songs.length
-    );
+    classifier.labelProbabilities.set(label, classifier.labelCounts.get(label) / classifier.songs.length);
   });
 }
 
@@ -90,40 +103,48 @@ function setLabelsAndProbabilities() {
   setProbabilityOfChordsInLabels();
 }
 
-function classify(chords) {
-  var smoothing = 1.01;
-  var classified = new Map();
-  classifier.labelProbabilities.forEach(function (_probabilities, difficulty) {
-    var first = classifier.labelProbabilities.get(difficulty) + smoothing;
-    chords.forEach(function (chord) {
-      var probabilityOfChordInLabel = classifier.probabilityOfChordsInLabels.get(difficulty)[chord];
-      if (probabilityOfChordInLabel) {
-        first = first * (probabilityOfChordInLabel + smoothing);
-      }
-    });
-    classified.set(difficulty, first);
-  });
-  return classified;
-}
+// function classify(chords) {
+//   const smoothing = 1.01;
+//   const classified = new Map();
+//   classifier.labelProbabilities.forEach(function (_probabilities, difficulty) {
+//     const totalikelihood = chords.reduce((total, chord) => {
+//       const probabilityOfChordInLabel =
+//         classifier.probabilityOfChordsInLabels.get(difficulty)[chord];
+//       if (probabilityOfChordInLabel) {
+//         return total * (probabilityOfChordInLabel + smoothing);
+//       } else {
+//         return total;
+//       }
+//     }, classifier.labelProbabilities.get(difficulty) + smoothing);
+//     classified.set(difficulty, totalikelihood);
+//   });
+//   return classified;
+// }
+//   classified.set(
+//     difficulty,
+//     chords.reduce((total, chord) => {
+//       const probabilityOfChordInLabel =
+//         classifier.probabilityOfChordsInLabels.get(difficulty)[chord];
+//       return total * (probabilityOfChordInLabel ? probabilityOfChordInLabel + smoothing : 1);
+//     }, classifier.labelProbabilities.get(difficulty) + smoothing)
+//   );
+// });
 
-var wish = require("wish");
+const wish = require("wish");
 describe("the file", function () {
   trainAll();
   it("classifies", function () {
-    var classified = classify(["f#m7", "a", "dadd9", "dmaj7", "bm", "bm7", "d", "f#m"]);
+    const classified = classifier.classify(["f#m7", "a", "dadd9", "dmaj7", "bm", "bm7", "d", "f#m"]);
     wish(classified.get("easy") === 1.3433333333333333);
     wish(classified.get("medium") === 1.5060259259259259);
     wish(classified.get("hard") === 1.6884223991769547);
   });
   it("classifies again", function () {
-    var classified = classify(["d", "g", "e", "dm"]);
+    const classified = classifier.classify(["d", "g", "e", "dm"]);
     wish(classified.get("easy") === 2.023094827160494);
     wish(classified.get("medium") === 1.855758613168724);
     wish(classified.get("hard") === 1.855758613168724);
   });
-  // it("sets welcome message", function () {
-  //   wish(welcomeMessage() === "Welcome to nb.js!");
-  // });
   it("label probabilities", function () {
     wish(classifier.labelProbabilities.get("easy") === 0.3333333333333333);
     wish(classifier.labelProbabilities.get("medium") === 0.3333333333333333);
