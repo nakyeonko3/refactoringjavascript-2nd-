@@ -1,5 +1,5 @@
 {
-  "spec": "test/**/*.js",
+  "spec": ["test/**/*.js", "test/**/*.cjs"],
   "recursive": true,
   "reporter": "spec",
   "ui": "bdd"
