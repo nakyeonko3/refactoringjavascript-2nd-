@@ -11,12 +11,6 @@ const classifier = {
   probabilityOfChordsInLabels: new Map(),
 };
 
-function setDifficulties() {
-  easy = "easy";
-  medium = "medium";
-  hard = "hard";
-}
-
 const songList = {
   difficulty: ["easy", "medium", "hard"],
   songs: [],
@@ -85,7 +79,6 @@ function setProbabilityOfChordsInLabels() {
 }
 
 function trainAll() {
-  setDifficulties();
   setSongs();
   songList.songs.forEach((song) => train(song.chords, song.difficulty));
   setLabelsAndProbabilities();
