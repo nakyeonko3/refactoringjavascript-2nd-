@@ -8,21 +8,24 @@
   "license": "ISC",
   "description": "",
   "scripts": {
-    "test": "jest",
-    "lint": "eslint . --fix",
-    "test:watch": "jest --watchAll"
-  },
-  "jest": {
-    "testPathIgnorePatterns": [
-      "practice"
-    ]
+    "test": "mocha",
+    "test:watch": "mocha --node-option=watch",
+    "lint": "eslint . --fix"
   },
   "devDependencies": {
     "@types/bun": "latest",
     "jest": "^29.7.0",
-    "nodemon": "^3.1.4"
+    "nodemon": "^3.1.4",
+    "ts-node": "^10.9.2",
+    "wish": "^1.0.1"
   },
   "peerDependencies": {
     "typescript": "^5.0.0"
+  },
+  "dependencies": {
+    "@types/chai": "^4.3.18",
+    "chai": "^5.1.1",
+    "deep-equal": "^2.2.3",
+    "mocha": "^10.7.3"
   }
 }
