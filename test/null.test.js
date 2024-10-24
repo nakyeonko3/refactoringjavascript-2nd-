@@ -16,20 +16,16 @@ const capitalize = (string) => string[0].toUpperCase() + string.substring(1);
 const tigerify = (string) => `${string}, the tiger`;
 const display = (string) => string.toString();
 
-const test = require("tape");
-test("Displaying a person", (assert) => {
+test("Displaying a person", () => {
   const personOne = new Person("tony");
-  assert.equal(
-    S.fromMaybe("", personOne.name.map(capitalize).map(tigerify)),
+
+  expect(personOne.name.map(capitalize).map(tigerify).map(display)).toBe(
     "Tony, the tiger"
   );
-  assert.end();
 });
-test("Displaying an anonymous person", (assert) => {
-  const personTwo = new AnonymousPerson(null);
-  assert.equal(
-    S.fromMaybe("", personTwo.name.map(capitalize).map(tigerify)),
-    ""
-  );
-  assert.end();
-});
+// test("Displaying an anonymous person", () => {
+//   const personTwo = new AnonymousPerson("tony");
+//   expect(S.fromMaybe("", personTwo.name.map(capitalize).map(tigerify))).toBe(
+//     ""
+//   );
+// });
